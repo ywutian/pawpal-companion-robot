@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pawpal-supervisor"
+version = "0.2.0"
+description = "Optional Raspberry Pi supervisor for the PawPal companion robot"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Yitian Wu"}]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: System :: Hardware",
+]
+dependencies = []
+
+[project.optional-dependencies]
+hardware = ["pyserial==3.5"]
+
+[project.scripts]
+pawpal-demo = "pawpal_supervisor.demo:main"
+pawpal-control = "pawpal_supervisor.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
