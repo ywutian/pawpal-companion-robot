@@ -1,0 +1,27 @@
+export function getElements(root = document) {
+  return {
+    canvas: root.querySelector("#face-canvas"),
+    modeValue: root.querySelector("#mode-value"),
+    expressionValue: root.querySelector("#expression-value"),
+    alertValue: root.querySelector("#alert-value"),
+    revisionValue: root.querySelector("#revision-value"),
+    priorityLabel: root.querySelector("#priority-label"),
+    eventList: root.querySelector("#event-list"),
+    protocolList: root.querySelector("#protocol-list"),
+    modeButtons: [...root.querySelectorAll(".mode-button")],
+    eventButtons: [...root.querySelectorAll(".event-button")],
+    runDemoButton: root.querySelector("#run-demo"),
+    clearLogButton: root.querySelector("#clear-log"),
+    downloadReportButton: root.querySelector("#download-report"),
+    injectInvalidButton: root.querySelector("#inject-invalid"),
+    rebootDeviceButton: root.querySelector("#reboot-device"),
+    pingDeviceButton: root.querySelector("#ping-device"),
+    testPersistenceButton: root.querySelector("#test-persistence"),
+    metricUptime: root.querySelector("#metric-uptime"),
+    metricCommands: root.querySelector("#metric-commands"),
+    metricAccepted: root.querySelector("#metric-accepted"),
+    metricRejected: root.querySelector("#metric-rejected"),
+    metricSensors: root.querySelector("#metric-sensors"),
+    metricFrames: root.querySelector("#metric-frames"),
+  };
+}

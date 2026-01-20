@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A software-only digital twin of the PawPal ESP32-S3 companion robot, including virtual serial protocol and behavior telemetry."
+    />
+    <title>PawPal Robot Simulator</title>
+    <link rel="stylesheet" href="./styles/base.css" />
+    <link rel="stylesheet" href="./styles/workspace.css" />
+    <link rel="stylesheet" href="./styles/controls.css" />
+    <link rel="stylesheet" href="./styles/showcase.css" />
+    <link rel="stylesheet" href="./styles/scenarios.css" />
+    <link rel="stylesheet" href="./styles/responsive.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div>
+        <p class="eyebrow">Software-only digital twin</p>
+        <h1>PawPal Product Loop</h1>
+      </div>
+      <div class="status-stack">
+        <div class="connection-status" role="status" aria-label="Virtual connection status">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span id="connection-message">Connecting to Python supervisor…</span>
+        </div>
+        <p id="service-error" role="alert"></p>
+        <span class="hardware-badge">Online demonstration</span>
+      </div>
+    </header>
+
+    <section id="scenario-panel" class="product-loop" aria-labelledby="scenario-title">
+      <div class="scenario-runner">
+        <p class="section-kicker">Input → decision → response → saved result</p>
+        <h2 id="scenario-title">Choose a product scenario</h2>
+        <p class="scenario-help">Synthetic data replay — no camera, microphone, or live pet recognition. Rules run in the Python supervisor.</p>
+        <div class="button-grid">
+          <button class="button" data-scenario="companion" type="button">Replay companionship</button>
+          <button class="button" data-scenario="training" type="button">Replay training</button>
+          <button class="button" data-scenario="monitoring" type="button">Replay monitoring</button>
+        </div>
+        <p id="scenario-current" role="status">Connecting…</p>
+        <progress id="scenario-progress" max="1" value="0" aria-label="Scenario input progress"></progress>
+        <p id="scenario-rule"></p>
+        <p id="scenario-input"></p>
+        <ol id="scenario-timeline" class="decision-timeline" aria-label="Current scenario decisions">
+          <li class="timeline-empty">Input decisions will appear here during replay.</li>
+        </ol>
+        <div class="button-row">
+          <button id="stop-scenario" class="button" type="button" disabled>Stop replay</button>
+          <button id="confirm-alert" class="button button-warning" type="button" disabled>Confirm alert &amp; resume</button>
+        </div>
+      </div>
+      <div class="scenario-history">
+        <div class="history-heading">
+          <div>
+            <p class="section-kicker">Persistent evidence</p>
+            <h2>Saved runs</h2>
+          </div>
+          <button id="open-clear-history" class="text-button" type="button">Reset demo</button>
+        </div>
+        <p class="scenario-help">Stored locally in SQLite across refreshes and supervisor restarts. The report contains the complete retained history.</p>
+        <p id="history-count" class="history-count">No saved runs</p>
+        <ol id="run-history"><li>No saved runs yet. Start a replay.</li></ol>
+      </div>
+    </section>
+
+    <dialog id="clear-history-dialog">
+      <form method="dialog">
+        <p class="section-kicker">Reset local demonstration</p>
+        <h2>Clear saved runs?</h2>
+        <p>This removes the local run history and returns the software device to idle. Download a report first if you need a copy.</p>
+        <div class="button-row">
+          <button class="button" value="cancel">Keep runs</button>
+          <button id="confirm-clear-history" class="button button-warning" value="confirm">Clear saved runs</button>
+        </div>
+      </form>
+    </dialog>
+
+    <details id="engineering-details" class="engineering-disclosure" open>
+      <summary>
+        <strong>Engineering bench</strong>
+        <span>Manual controls, protocol diagnostics, and implementation evidence</span>
+      </summary>
+    <main class="workspace">
+      <section class="robot-stage" aria-labelledby="robot-preview-title">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Live preview</p>
+            <h2 id="robot-preview-title">Robot display</h2>
+          </div>
+          <span id="priority-label" class="priority-label">Normal priority</span>
+        </div>
+
+        <div class="device-shell">
+          <div class="device-label">PAWPAL / DEV-01</div>
+          <canvas
+            id="face-canvas"
+            width="240"
+            height="240"
+            role="img"
+            aria-label="Robot face showing a neutral expression"
+          ></canvas>
+          <div class="device-footer">
+            <span>ESP32-S3</span>
+            <span>ST7789 / 240×240</span>
+          </div>
+        </div>
+
+        <dl class="telemetry" aria-label="Robot state telemetry">
+          <div>
+            <dt>Mode</dt>
+            <dd id="mode-value">idle</dd>
+          </div>
+          <div>
+            <dt>Expression</dt>
+            <dd id="expression-value">neutral</dd>
+          </div>
+          <div>
+            <dt>Alert latch</dt>
+            <dd id="alert-value">clear</dd>
+          </div>
+          <div>
+            <dt>Revision</dt>
+            <dd id="revision-value">0</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="control-panel" aria-labelledby="controls-title">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Engineering bench</p>
+            <h2 id="controls-title">Manual controls</h2>
+          </div>
+          <button id="run-demo" class="button button-primary" type="button">
+            Run product demo
+          </button>
+        </div>
+
+        <fieldset class="control-group">
+          <legend>Product mode</legend>
+          <div id="mode-controls" class="button-grid button-grid-modes">
+            <button class="button mode-button is-active" type="button" data-mode="idle">Idle</button>
+            <button class="button mode-button" type="button" data-mode="companion">Companion</button>
+            <button class="button mode-button" type="button" data-mode="training">Training</button>
+            <button class="button mode-button" type="button" data-mode="monitoring">Monitoring</button>
+          </div>
+        </fieldset>
+
+        <fieldset class="control-group">
+          <legend>Simulated sensors and product events</legend>
+          <div class="button-grid">
+            <button class="button event-button" type="button" data-event="touch">Touch</button>
+            <button class="button event-button" type="button" data-event="long_press">Long press</button>
+            <button class="button event-button" type="button" data-event="motion">Motion</button>
+            <button class="button event-button" type="button" data-event="shake">Shake</button>
+            <button class="button event-button" type="button" data-event="training_success">
+              Training success
+            </button>
+          </div>
+        </fieldset>
+
+        <fieldset class="control-group control-group-alert">
+          <legend>Monitoring alert</legend>
+          <p>
+            An active alert blocks lower-priority companion and training events until it is cleared.
+          </p>
+          <div class="button-row">
+            <button class="button button-warning event-button" type="button" data-event="alert_raised">
+              Raise alert
+            </button>
+            <button class="button event-button" type="button" data-event="alert_cleared">
+              Clear alert
+            </button>
+          </div>
+        </fieldset>
+
+        <fieldset class="control-group">
+          <legend>Engineering checks</legend>
+          <p>Exercise protocol failure handling and deterministic recovery without changing the product demo.</p>
+          <div class="button-row">
+            <button id="ping-device" class="button" type="button">Ping device</button>
+            <button id="inject-invalid" class="button" type="button">Inject malformed frame</button>
+            <button id="test-persistence" class="button" type="button">Test NVS persistence</button>
+            <button id="reboot-device" class="button" type="button">Reboot virtual ESP32</button>
+          </div>
+        </fieldset>
+
+        <section class="event-log" aria-labelledby="event-log-title">
+          <div class="log-heading">
+            <h3 id="event-log-title">Event log</h3>
+            <button id="clear-log" class="text-button" type="button">Clear</button>
+          </div>
+          <ol id="event-list" aria-live="polite" aria-relevant="additions"></ol>
+        </section>
+      </section>
+    </main>
+
+    <section class="showcase" aria-labelledby="architecture-title">
+      <div class="architecture-panel">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">End-to-end path</p>
+            <h2 id="architecture-title">What this demo actually runs</h2>
+          </div>
+          <span class="truth-label">Software pathway</span>
+        </div>
+        <div class="data-flow" aria-label="Virtual system data flow">
+          <div><strong>Controls</strong><span>product intent</span></div>
+          <b aria-hidden="true">→</b>
+          <div><strong>Python service</strong><span>rules + command ID</span></div>
+          <b aria-hidden="true">→</b>
+          <div><strong>NDJSON bridge</strong><span>process transport</span></div>
+          <b aria-hidden="true">→</b>
+          <div><strong>Virtual ESP32</strong><span>Node.js device model</span></div>
+          <b aria-hidden="true">→</b>
+          <div><strong>ACK + state</strong><span>display telemetry</span></div>
+        </div>
+        <p class="sensor-branch">HTTP connects this page to the actual Python supervisor. A separate Node.js process runs the device model; SQLite saves scenarios and confirmation records.</p>
+        <div class="evidence-grid" aria-label="Implementation evidence">
+          <div><span class="evidence-state pass">Passed</span><strong>ESP32 build</strong><small>PlatformIO compile</small></div>
+          <div><span class="evidence-state pass">Passed</span><strong>Behavior tests</strong><small>native + browser</small></div>
+          <div><span class="evidence-state pass">Live</span><strong>Protocol loop</strong><small>ACK and telemetry</small></div>
+          <div><span class="evidence-state pending">Offline</span><strong>Physical device</strong><small>not part of web demo</small></div>
+        </div>
+        <dl class="runtime-metrics" aria-label="Virtual runtime diagnostics">
+          <div><dt>Protocol</dt><dd>v1</dd></div>
+          <div><dt>Uptime</dt><dd id="metric-uptime">0s</dd></div>
+          <div><dt>Commands</dt><dd id="metric-commands">0</dd></div>
+          <div><dt>Accepted ACK</dt><dd id="metric-accepted">0</dd></div>
+          <div><dt>Rejected ACK</dt><dd id="metric-rejected">0</dd></div>
+          <div><dt>Sensor events</dt><dd id="metric-sensors">0</dd></div>
+          <div><dt>RX frames</dt><dd id="metric-frames">0</dd></div>
+        </dl>
+      </div>
+
+      <div class="protocol-panel" aria-labelledby="protocol-title">
+        <div class="log-heading">
+          <div>
+            <p class="section-kicker">Inspectable evidence</p>
+            <h2 id="protocol-title">Virtual serial trace</h2>
+          </div>
+          <button id="download-report" class="button" type="button">Download run report</button>
+        </div>
+        <p class="protocol-help">Supervisor controls produce the newline-delimited JSON frames expected by the Raspberry Pi and ESP32 firmware; local sensors enter on the device side.</p>
+        <ol id="protocol-list" aria-live="polite" aria-relevant="additions"></ol>
+      </div>
+    </section>
+    </details>
+
+    <footer>
+        This local software demonstration runs Python rules, a separate virtual-device process, and persistent scenario records. C++ firmware is built separately; this page does not execute it or perform live pet recognition.
+    </footer>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
