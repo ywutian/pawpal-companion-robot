@@ -1,0 +1,145 @@
+:root {
+  color-scheme: dark;
+  --color-page: #111513;
+  --color-surface: #191f1c;
+  --color-surface-raised: #222a26;
+  --color-border: #3a4540;
+  --color-border-strong: #59655f;
+  --color-text: #f3f4ef;
+  --color-text-muted: #aeb8b2;
+  --color-accent: #6dd7c3;
+  --color-accent-ink: #09231e;
+  --color-warning: #f0b94d;
+  --color-danger: #ff7369;
+  --radius-small: 0.25rem;
+  --radius-medium: 0.5rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-synthesis: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 20rem;
+  margin: 0;
+  color: var(--color-text);
+  background: var(--color-page);
+}
+
+button {
+  font: inherit;
+}
+
+.site-header,
+.product-loop,
+.engineering-disclosure > summary,
+.workspace,
+.showcase,
+footer {
+  width: min(72rem, calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+.site-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block: var(--space-8) var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-block-start: 0;
+}
+
+h1 {
+  margin-block-end: 0;
+  font-size: clamp(1.5rem, 5vw, 2.25rem);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+
+h2 {
+  margin-block-end: 0;
+  font-size: 1.125rem;
+}
+
+h3 {
+  margin-block-end: 0;
+  font-size: 0.9375rem;
+}
+
+.eyebrow,
+.section-kicker {
+  margin-block-end: var(--space-2);
+  color: var(--color-accent);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.connection-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.status-stack {
+  display: grid;
+  justify-items: end;
+  gap: var(--space-2);
+}
+
+.hardware-badge,
+.truth-label {
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--color-warning);
+  border-radius: var(--radius-small);
+  color: var(--color-warning);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+}
+
+.status-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+.engineering-disclosure > summary {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block: var(--space-3);
+  border-block: 1px solid var(--color-border);
+  color: var(--color-accent);
+  cursor: pointer;
+}
+
+.engineering-disclosure > summary span {
+  color: var(--color-text-muted);
+  font-size: 0.6875rem;
+}
+
+.engineering-disclosure > summary:focus-visible {
+  outline: 0.1875rem solid var(--color-accent);
+  outline-offset: 0.125rem;
+}

@@ -1,0 +1,104 @@
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(18rem, 1fr) minmax(20rem, 1.2fr);
+  gap: var(--space-6);
+  padding-block: var(--space-6);
+}
+
+.robot-stage,
+.control-panel {
+  min-width: 0;
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.robot-stage {
+  align-self: start;
+}
+
+.section-heading,
+.log-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.priority-label {
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-small);
+  color: var(--color-text-muted);
+  font-size: 0.6875rem;
+}
+
+.priority-label.is-alert {
+  border-color: var(--color-warning);
+  color: var(--color-warning);
+}
+
+.device-shell {
+  width: min(100%, 20rem);
+  margin: var(--space-6) auto;
+  padding: var(--space-4);
+  border: 1px solid #535d58;
+  border-radius: var(--radius-medium);
+  background: #242a27;
+  box-shadow: inset 0 0 0 0.25rem #171b19;
+}
+
+.device-label,
+.device-footer {
+  color: #a5aea9;
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+}
+
+.device-label {
+  margin-block-end: var(--space-3);
+}
+
+.device-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-block-start: var(--space-3);
+}
+
+#face-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid #0c0f0d;
+  background: #050706;
+  image-rendering: pixelated;
+}
+
+.telemetry {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 0;
+  border-top: 1px solid var(--color-border);
+  border-left: 1px solid var(--color-border);
+}
+
+.telemetry div {
+  min-width: 0;
+  padding: var(--space-3);
+  border-right: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.telemetry dt {
+  margin-block-end: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+}
+
+.telemetry dd {
+  overflow: hidden;
+  margin: 0;
+  font-size: 0.8125rem;
+  text-overflow: ellipsis;
+}
