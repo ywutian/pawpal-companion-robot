@@ -1,0 +1,71 @@
+name: PawPal CI
+
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  firmware:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install platformio==6.1.18
+      - run: pio test -d firmware -e native
+      - run: pio run -d firmware -e esp32-s3-devkitc-1
+      - run: sha256sum firmware/.pio/build/esp32-s3-devkitc-1/firmware.bin > firmware.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pawpal-firmware
+          if-no-files-found: error
+          path: |
+            firmware/.pio/build/esp32-s3-devkitc-1/firmware.bin
+            firmware.sha256
+
+  supervisor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: supervisor/pyproject.toml
+      - run: python -m pip install -e supervisor
+      - run: python -m unittest discover -s supervisor/tests -v
+
+  simulator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: make test-js
+      - run: make qa
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pawpal-product-loop-screenshots
+          path: .qa/simulator/
+          if-no-files-found: error
