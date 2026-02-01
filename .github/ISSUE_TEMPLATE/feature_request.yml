@@ -1,0 +1,30 @@
+name: Feature request
+description: Propose a focused change to PawPal
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: Describe the user or engineering need before proposing an implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Explain inputs, outputs, failure behavior, and affected components.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: checkboxes
+    id: evidence
+    attributes:
+      label: Scope
+      options:
+        - label: I have separated simulated behavior from physically validated behavior.
+          required: true
