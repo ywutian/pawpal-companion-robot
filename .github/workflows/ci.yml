@@ -24,7 +24,7 @@ jobs:
       - run: pio test -d firmware -e native
       - run: pio run -d firmware -e esp32-s3-devkitc-1
       - run: sha256sum firmware/.pio/build/esp32-s3-devkitc-1/firmware.bin > firmware.sha256
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: pawpal-firmware
           if-no-files-found: error
@@ -63,7 +63,7 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: make test-js
       - run: make qa
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: pawpal-product-loop-screenshots
