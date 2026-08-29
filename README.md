@@ -1,5 +1,8 @@
 # PawPal Companion Robot
 
+[![PawPal CI](https://github.com/ywutian/pawpal-companion-robot/actions/workflows/ci.yml/badge.svg)](https://github.com/ywutian/pawpal-companion-robot/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 PawPal is a small physical companion-robot reference project built around an ESP32-S3. It turns product concepts such as companionship, training, and monitoring into explicit modes, event rules, expressions, and screen output. A Raspberry Pi can be added as an optional supervisor for higher-level product logic.
 
 The repository is released under the MIT License. It is designed to be readable,
