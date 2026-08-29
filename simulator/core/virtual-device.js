@@ -53,7 +53,8 @@ export class VirtualEspDevice {
     if (["get_config", "set_config", "reset_config"].includes(command.type)) {
       return this.#handleConfig(command);
     }
-    if (command.type === "ping") return this.#accept(command.id);
+    // Pings are never journaled: liveness-rate writes would wear real NVS.
+    if (command.type === "ping") return [encodeFrame(ack(command.id, true))];
     return this.#handleBehavior(command, now);
   }
 
@@ -164,10 +165,6 @@ export class VirtualEspDevice {
       return value >= 60 && value <= 500 && value > motion;
     }
     return false;
-  }
-
-  #accept(id) {
-    return [this.#cachedAck(id, true)];
   }
 
   #reject(id, error, countParseError = false) {

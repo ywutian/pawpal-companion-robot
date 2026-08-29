@@ -88,6 +88,11 @@ Expression BehaviorEngine::baseExpression(RobotMode mode) const {
 BehaviorOutcome BehaviorEngine::handleWithOutcome(const RobotEvent& event) {
   bool changed = false;
 
+  // Liveness must stay observable even while an alert is latched.
+  if (event.type == EventType::kPing) {
+    return BehaviorOutcome(true, false, nullptr);
+  }
+
   if (event.type == EventType::kAlertRaised) {
     state_.alert_latched = true;
     changed = setMode(RobotMode::kAlert, event.timestamp_ms);

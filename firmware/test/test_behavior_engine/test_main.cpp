@@ -73,6 +73,16 @@ void test_ping_is_accepted_without_state_change() {
   TEST_ASSERT_EQUAL_UINT32(0, engine.state().revision);
 }
 
+void test_ping_is_accepted_while_alert_is_latched() {
+  BehaviorEngine engine;
+  TEST_ASSERT_TRUE(engine.handle(makeEvent(EventType::kAlertRaised, 100)));
+  const BehaviorOutcome outcome = engine.handleWithOutcome(
+      makeEvent(EventType::kPing, 200));
+  TEST_ASSERT_TRUE(outcome.accepted);
+  TEST_ASSERT_FALSE(outcome.changed);
+  TEST_ASSERT_EQUAL_STRING("alert", modeName(engine.state().mode));
+}
+
 }  // namespace
 
 int main(int, char**) {
@@ -83,5 +93,6 @@ int main(int, char**) {
   RUN_TEST(test_alert_rejection_reports_protocol_reason);
   RUN_TEST(test_same_mode_is_accepted_without_revision_change);
   RUN_TEST(test_ping_is_accepted_without_state_change);
+  RUN_TEST(test_ping_is_accepted_while_alert_is_latched);
   return UNITY_END();
 }

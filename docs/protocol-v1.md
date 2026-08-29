@@ -10,6 +10,7 @@ PawPal uses newline-delimited UTF-8 JSON at 115200 baud. Every command carries `
 - The cache is restored after reboot, so immediate command retries remain idempotent across reset and power loss.
 - An accepted ACK means the behavior engine accepted the command, not merely that JSON parsing succeeded.
 - State telemetry is independent of ACK delivery and is retained by the supervisor while it waits for a matching ACK.
+- `ping` is always answered, even while an alert is latched, and its ACK is never journaled: a retried ping simply executes again instead of replaying a cached result.
 
 ## Commands
 

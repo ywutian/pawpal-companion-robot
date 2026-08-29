@@ -1,0 +1,58 @@
+# Shared behavior-conformance fixture.
+#
+# Replayed step by step against BOTH behavior implementations:
+#   - firmware/test/test_conformance/test_main.cpp  (C++ BehaviorEngine)
+#   - simulator/behavior-conformance.test.mjs       (JS state-machine.js)
+# If either engine disagrees with a line, that engine has drifted.
+#
+# Columns: <at_ms> <op> <arg> <ok|reject:code> <mode> <expression> <revision>
+# ops: "event <name>" | "mode <mode>" | "tick -"
+# boot state stays idle
+0 tick - ok idle neutral 0
+# touch from idle enters companion with temporary happy
+1000 event touch ok companion happy 1
+# temporary expression persists before expiry
+3000 tick - ok companion happy 1
+# expires exactly at the until timestamp
+3500 tick - ok companion curious 2
+# motion allowed in companion; only the expiry timer changes
+4000 event motion ok companion curious 3
+# timer clearing alone still bumps the revision
+5500 tick - ok companion curious 4
+# training reward outside training mode is rejected
+6000 event training_success reject:invalid_context companion curious 4
+7000 mode training ok training curious 5
+# touch outside idle keeps the mode, still rewards happy
+7200 event touch ok training happy 6
+# re-entering the same mode clears the temporary expression
+7300 mode training ok training curious 7
+7500 event training_success ok training encouraging 8
+# motion is ignored outside idle and companion
+8000 event motion reject:invalid_context training encouraging 8
+9000 event shake ok training warning 9
+# alert latches
+10000 event alert_raised ok alert warning 10
+# duplicate alert accepted without a state change
+10500 event alert_raised ok alert warning 10
+# latched alert rejects lower-priority mode changes
+11000 mode companion reject:alert_latched alert warning 10
+11500 event touch reject:alert_latched alert warning 10
+12000 event training_success reject:alert_latched alert warning 10
+# tick during a latched alert is a no-op
+12500 tick - ok alert warning 10
+# clearing returns to monitoring
+13000 event alert_cleared ok monitoring sleepy 11
+# second clear has no alert to act on
+13500 event alert_cleared reject:no_active_alert monitoring sleepy 11
+# long press pulls monitoring back into companion
+14000 event long_press ok companion curious 12
+# one before expiry: unchanged
+16499 tick - ok companion curious 12
+16500 tick - ok companion curious 13
+17000 mode idle ok idle neutral 14
+# set_mode alert does NOT latch
+18000 mode alert ok alert warning 15
+# unlatched alert mode has nothing to clear
+18500 event alert_cleared reject:no_active_alert alert warning 15
+# leaving unlatched alert mode is allowed
+19000 mode idle ok idle neutral 16

@@ -103,8 +103,10 @@ void loop() {
     }
     const BehaviorOutcome outcome = behavior.handleWithOutcome(event);
     if (event.requires_ack) {
+      // Pings arrive at liveness rate; journaling their ACKs would wear NVS.
       protocol.sendAck(event.command_id, outcome.accepted,
-                       outcome.accepted ? nullptr : outcome.reason, true);
+                       outcome.accepted ? nullptr : outcome.reason,
+                       event.type != EventType::kPing);
     }
     changed = outcome.changed || changed;
   }

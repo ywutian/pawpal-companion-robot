@@ -3,6 +3,24 @@
 All notable public changes to PawPal are documented here. The project follows
 [Semantic Versioning](https://semver.org/) from its first public release.
 
+## [0.2.1] - 2026-08-29
+
+### Fixed
+
+- `ping` is now accepted while an alert is latched, so liveness checks keep
+  working in exactly the state that most needs them. Previously the firmware
+  rejected it with `alert_latched` while the virtual device accepted it.
+- Ping acknowledgements are no longer journaled to NVS (or to the virtual
+  device's persistence), removing flash writes at liveness-check rate and
+  matching the documented human-rate journal rule. Pings are idempotent, so a
+  retried ping executes again instead of replaying a cached ACK.
+
+### Added
+
+- A shared behavior-conformance fixture replayed by both the firmware host
+  tests and the browser state-machine tests, pinning both implementations to
+  identical mode, expression, revision, and rejection semantics.
+
 ## [0.2.0] - 2026-08-29
 
 Initial public release.

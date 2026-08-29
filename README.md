@@ -167,6 +167,9 @@ offline recovery, keyboard start/stop, protocol rejection, and responsive layout
 at 320, 768, 1024, and 1440 px. Python integration tests use the real Node process
 and SQLite to verify service restart, duplicate requests, child-process recovery,
 and rollback when saving a confirmation fails. Tests do not flash hardware.
+A shared fixture, `firmware/test/test_conformance/behavior_conformance.txt`, is
+replayed by both the firmware host tests and the browser state-machine tests so
+the C++ and JavaScript behavior implementations cannot silently drift apart.
 
 ## Build and flash the ESP32-S3
 
