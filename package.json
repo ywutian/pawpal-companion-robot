@@ -1,6 +1,6 @@
 {
   "name": "pawpal-companion-robot",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Software-first reference stack for an ESP32-S3 companion robot",
   "private": true,
   "license": "MIT",

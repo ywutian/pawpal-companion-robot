@@ -105,7 +105,11 @@ Owner confirmation → alert cleared + confirmation record
 ```
 
 The device model reuses the tested JavaScript behavior rules in a separate process;
-it is not C++ running in the browser. The Python service owns the active scenario,
+it is not C++ running in the browser. The two implementations are held together by
+`firmware/test/test_conformance/behavior_conformance.txt`, a fixture replayed by both
+the firmware host tests and the browser tests, so a rule that changes in one engine
+and not the other fails CI rather than silently making the showcase lie about the
+hardware. The Python service owns the active scenario,
 replay cursor, and decisions. Background advancement continues if the page closes.
 Only explicit confirmation releases a scenario's monitoring alert. Manual controls
 cannot overwrite an active run. Completed history is bounded to 100 runs; trace
